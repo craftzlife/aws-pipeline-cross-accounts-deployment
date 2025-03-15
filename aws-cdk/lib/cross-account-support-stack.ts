@@ -6,7 +6,12 @@ import { AccountPrincipal, Role } from "aws-cdk-lib/aws-iam";
 export class CrossAccountSupportStack extends Stack {
 
   public readonly iamRole: Role
-  
+  /**
+   * 
+   * @param scope This class is deprecated, as cdk can handle cross account by it own roles
+   * @param id 
+   * @param props 
+   */
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
