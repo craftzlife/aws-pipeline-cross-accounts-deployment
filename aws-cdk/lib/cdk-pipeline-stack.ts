@@ -2,6 +2,8 @@ import { Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { AwsEnv } from '../bin/configs';
 import * as cdk from 'aws-cdk-lib';
+import { WebAppHostingStack } from './webapp-hosting-stack';
+import { CrossAccountSupportStack } from './cross-account-support-stack';
 
 export class AwsCdkPipelineStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -21,7 +23,7 @@ export class AwsCdkPipelineStack extends Stack {
     });
 
     const cdkPipeline = new cdk.pipelines.CodePipeline(this, 'CdkPipeline', {
-      pipelineName: 'CdkPipeline',
+      // pipelineName: 'CdkPipeline',
       artifactBucket: artifactBucket,
       synth: new cdk.pipelines.ShellStep('Synth', {
         input: cdk.pipelines.CodePipelineSource.gitHub('khaihoan2711/aws-pipeline-cross-accounts-deployment', 'main', {
@@ -45,9 +47,8 @@ export class CrossAccountSupportStage extends cdk.Stage {
   constructor(scope: Construct, id: string, props?: cdk.StageProps) {
     super(scope, id, props);
 
-    new cdk.Stack(this, 'CrossAccountSupportStack', {
-      stackName: 'CrossAccountSupportStack',
-      env: AwsEnv.tooling,
+    new CrossAccountSupportStack(this, 'CrossAccountSupportStack', {
+      env: AwsEnv.develop
     });
   }
 }
@@ -56,8 +57,7 @@ export class WebAppHostingStage extends cdk.Stage {
   constructor(scope: Construct, id: string, props?: cdk.StageProps) {
     super(scope, id, props);
 
-    new cdk.Stack(this, 'WebAppHostingStack', {
-      stackName: 'WebAppHostingStack',
+    new WebAppHostingStack(this, 'WebAppHostingStack', {
       env: AwsEnv.develop,
     });
   }
