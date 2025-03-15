@@ -27,7 +27,8 @@ export class AwsCdkPipelineStack extends Stack {
         input: cdk.pipelines.CodePipelineSource.gitHub('khaihoan2711/aws-pipeline-cross-accounts-deployment', 'main', {
           authentication: cdk.SecretValue.secretsManager('github-token'),
         }),
-        commands: ['npm ci', 'npm run build', 'npx cdk synth'],
+        commands: ['cd aws-cdk', 'npm ci', 'npm run build', 'npx cdk synth'],
+        primaryOutputDirectory: 'aws-cdk/cdk.out',
       }),
       selfMutation: true,
     });
