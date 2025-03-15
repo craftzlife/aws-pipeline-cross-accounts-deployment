@@ -24,7 +24,9 @@ export class AwsCdkPipelineStack extends Stack {
       pipelineName: 'CdkPipeline',
       artifactBucket: artifactBucket,
       synth: new cdk.pipelines.ShellStep('Synth', {
-        input: cdk.pipelines.CodePipelineSource.gitHub('khaihoan2711/aws-pipeline-cross-accounts-deployment', 'main'),
+        input: cdk.pipelines.CodePipelineSource.gitHub('khaihoan2711/aws-pipeline-cross-accounts-deployment', 'main', {
+          authentication: cdk.SecretValue.secretsManager('github-token'),
+        }),
         commands: ['npm ci', 'npm run build', 'npx cdk synth'],
       }),
       selfMutation: true,
