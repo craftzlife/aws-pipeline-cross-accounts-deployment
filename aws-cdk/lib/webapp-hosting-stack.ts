@@ -16,13 +16,15 @@ export class WebAppHostingStack extends cdk.Stack {
     //   ],
     //   destinationBucket: _HostingBucket,
     // });
-    const _CloudFrontDistribution = new cdk.aws_cloudfront.Distribution(this, 'CloudfrontDistribution', {
-      defaultBehavior: {
-        origin: cdk.aws_cloudfront_origins.S3BucketOrigin.withOriginAccessControl(_HostingBucket),
-        allowedMethods: cdk.aws_cloudfront.AllowedMethods.ALLOW_ALL,
-        cachedMethods: cdk.aws_cloudfront.CachedMethods.CACHE_GET_HEAD,
-        viewerProtocolPolicy: cdk.aws_cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-      }
-    });
+    
+    // Temporary disable cloudfront as AWS require account to be verified before using
+    // const _CloudFrontDistribution = new cdk.aws_cloudfront.Distribution(this, 'CloudfrontDistribution', {
+    //   defaultBehavior: {
+    //     origin: cdk.aws_cloudfront_origins.S3BucketOrigin.withOriginAccessControl(_HostingBucket),
+    //     allowedMethods: cdk.aws_cloudfront.AllowedMethods.ALLOW_ALL,
+    //     cachedMethods: cdk.aws_cloudfront.CachedMethods.CACHE_GET_HEAD,
+    //     viewerProtocolPolicy: cdk.aws_cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+    //   }
+    // });
   }
 }
