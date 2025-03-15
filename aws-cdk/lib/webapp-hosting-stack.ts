@@ -26,7 +26,7 @@ export class WebAppHostingStack extends cdk.Stack {
               [
                 'npm i',
                 'npm run build',
-                'cp -r dist /asset-output'
+                'cp -r dist/angular-static-webapp/* /asset-output'
               ].join(' && ')
             ],
             user: 'root',
