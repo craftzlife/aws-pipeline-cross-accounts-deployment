@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 import * as cdk from 'aws-cdk-lib';
 import { AwsCdkPipelineStack } from '../lib/cdk-pipeline-stack';
-import { AwsEnv } from './configs';
+import * as configs from './configs';
 
 const app = new cdk.App();
 new AwsCdkPipelineStack(app, 'AwsCdkStack', {
-  env: AwsEnv.tooling,
+  stackName: configs.ProductName,
+  env: configs.AwsEnv.tooling,
 });

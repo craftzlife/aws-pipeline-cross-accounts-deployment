@@ -1,7 +1,7 @@
 import * as cdk from 'aws-cdk-lib';
 
-export const ProductName = 'CrossAccountSupportDemo';
-export const ProductId = 'CASD';
+export const ProductName = 'CdkPipelineCrossAccount';
+export const ProductId = 'CPCA';
 
 export enum AWS {
     tooling = 'tooling',
