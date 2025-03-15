@@ -33,6 +33,7 @@ export class AwsCdkPipelineStack extends Stack {
         primaryOutputDirectory: 'aws-cdk/cdk.out',
       }),
       selfMutation: true,
+      publishAssetsInParallel: false,
     });
 
     const _WebAppHostingStage = new WebAppHostingStage(scope, 'Deploy-WebAppHosting');
