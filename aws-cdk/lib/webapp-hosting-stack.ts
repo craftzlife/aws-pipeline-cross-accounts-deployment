@@ -34,7 +34,7 @@ export class WebAppHostingStack extends cdk.Stack {
         }),
       ],
       destinationBucket: _HostingBucket,
-      serverSideEncryptionAwsKmsKeyId: 'alias/aws/s3',
+      // serverSideEncryptionAwsKmsKeyId: 'alias/aws/s3',
     });
     
     // Temporary disable cloudfront as AWS require account to be verified before using
