@@ -4,7 +4,7 @@ import { AwsEnv } from '../bin/configs';
 import * as cdk from 'aws-cdk-lib';
 import { WebAppHostingStack } from './webapp-hosting-stack';
 import { CrossAccountSupportStack } from './cross-account-support-stack';
-
+import * as configs from '../bin/configs';
 export class AwsCdkPipelineStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
@@ -35,7 +35,7 @@ export class AwsCdkPipelineStack extends Stack {
       selfMutation: true,
     });
 
-    const _WebAppHostingStage = new WebAppHostingStage(this, 'WebAppHostingStage');
+    const _WebAppHostingStage = new WebAppHostingStage(scope, 'Deploy-WebAppHosting');
     cdkPipeline.addStage(_WebAppHostingStage);
 
     // const _CrossAccountSupportStage = new CrossAccountSupportStage(this, 'CrossAccountSupportStage');
@@ -57,7 +57,8 @@ export class WebAppHostingStage extends cdk.Stage {
   constructor(scope: Construct, id: string, props?: cdk.StageProps) {
     super(scope, id, props);
 
-    new WebAppHostingStack(this, 'WebAppHostingStack', {
+    new WebAppHostingStack(this, 'WebAppHosting', {
+      stackName: [configs.ProductName, 'WebAppHosting'].join('-'),
       env: AwsEnv.develop,
     });
   }
