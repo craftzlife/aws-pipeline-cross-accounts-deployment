@@ -34,6 +34,7 @@ export class WebAppHostingStack extends cdk.Stack {
         }),
       ],
       destinationBucket: _HostingBucket,
+      destinationKeyPrefix: '/webapp'
       // distribution: '',
       // distributionPaths: '',
       // serverSideEncryptionAwsKmsKeyId: 'alias/aws/s3',
