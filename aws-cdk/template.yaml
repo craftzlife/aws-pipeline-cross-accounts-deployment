@@ -337,6 +337,54 @@ Resources:
                   - CdkPipelineCodeBuildActionRole28BA3E0C
                   - Arn
               RunOrder: 1
+            - ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Provider: CodeBuild
+                Version: "1"
+              Configuration:
+                ProjectName:
+                  Ref: CdkPipelineAssetsFileAsset2FD984081
+              InputArtifacts:
+                - Name: Synth_Output
+              Name: FileAsset2
+              RoleArn:
+                Fn::GetAtt:
+                  - CdkPipelineCodeBuildActionRole28BA3E0C
+                  - Arn
+              RunOrder: 1
+            - ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Provider: CodeBuild
+                Version: "1"
+              Configuration:
+                ProjectName:
+                  Ref: CdkPipelineAssetsFileAsset3F5F50E93
+              InputArtifacts:
+                - Name: Synth_Output
+              Name: FileAsset3
+              RoleArn:
+                Fn::GetAtt:
+                  - CdkPipelineCodeBuildActionRole28BA3E0C
+                  - Arn
+              RunOrder: 1
+            - ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Provider: CodeBuild
+                Version: "1"
+              Configuration:
+                ProjectName:
+                  Ref: CdkPipelineAssetsFileAsset4ACA86EDA
+              InputArtifacts:
+                - Name: Synth_Output
+              Name: FileAsset4
+              RoleArn:
+                Fn::GetAtt:
+                  - CdkPipelineCodeBuildActionRole28BA3E0C
+                  - Arn
+              RunOrder: 1
           Name: Assets
         - Actions:
             - ActionTypeId:
@@ -345,7 +393,7 @@ Resources:
                 Provider: CloudFormation
                 Version: "1"
               Configuration:
-                StackName: Deploy-WebAppHosting-WebAppHostingStack
+                StackName: CdkPipelineCrossAccount-WebAppHosting
                 Capabilities: CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND
                 RoleArn:
                   Fn::Join:
@@ -355,7 +403,7 @@ Resources:
                       - :iam::941377147791:role/cdk-hnb659fds-cfn-exec-role-941377147791-ap-southeast-1
                 ActionMode: CHANGE_SET_REPLACE
                 ChangeSetName: PipelineChange
-                TemplatePath: Synth_Output::assembly-Deploy-WebAppHosting/DeployWebAppHostingWebAppHostingStack0168AFAC.template.json
+                TemplatePath: Synth_Output::assembly-Deploy-WebAppHosting/DeployWebAppHostingFC166BD5.template.json
               InputArtifacts:
                 - Name: Synth_Output
               Name: Prepare
@@ -372,7 +420,7 @@ Resources:
                 Provider: CloudFormation
                 Version: "1"
               Configuration:
-                StackName: Deploy-WebAppHosting-WebAppHostingStack
+                StackName: CdkPipelineCrossAccount-WebAppHosting
                 ActionMode: CHANGE_SET_EXECUTE
                 ChangeSetName: PipelineChange
               Name: Deploy
@@ -561,6 +609,15 @@ Resources:
             Resource:
               - Fn::GetAtt:
                   - CdkPipelineAssetsFileAsset1416E4A07
+                  - Arn
+              - Fn::GetAtt:
+                  - CdkPipelineAssetsFileAsset2FD984081
+                  - Arn
+              - Fn::GetAtt:
+                  - CdkPipelineAssetsFileAsset3F5F50E93
+                  - Arn
+              - Fn::GetAtt:
+                  - CdkPipelineAssetsFileAsset4ACA86EDA
                   - Arn
               - Fn::GetAtt:
                   - CdkPipelineBuildSynthCdkBuildProject976C10F3
@@ -811,7 +868,7 @@ Resources:
               },
               "build": {
                 "commands": [
-                  "cdk-assets --path \"assembly-Deploy-WebAppHosting/DeployWebAppHostingWebAppHostingStack0168AFAC.assets.json\" --verbose publish \"faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6:941377147791-ap-southeast-1\""
+                  "cdk-assets --path \"assembly-Deploy-WebAppHosting/DeployWebAppHostingFC166BD5.assets.json\" --verbose publish \"faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6:941377147791-ap-southeast-1\""
                 ]
               }
             }
@@ -819,10 +876,136 @@ Resources:
         Type: CODEPIPELINE
     Metadata:
       aws:cdk:path: AwsCdkStack/CdkPipeline/Assets/FileAsset1/Resource
+  CdkPipelineAssetsFileAsset2FD984081:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Artifacts:
+        Type: CODEPIPELINE
+      Cache:
+        Type: NO_CACHE
+      Description: Pipeline step CdkPipelineCrossAccount/Pipeline/Assets/FileAsset2
+      EncryptionKey:
+        Fn::GetAtt:
+          - ArtifactEncryptKeyFDBB6BD7
+          - Arn
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/standard:7.0
+        ImagePullCredentialsType: CODEBUILD
+        PrivilegedMode: false
+        Type: LINUX_CONTAINER
+      ServiceRole:
+        Fn::GetAtt:
+          - CdkPipelineAssetsFileRoleDBBCC980
+          - Arn
+      Source:
+        BuildSpec: |-
+          {
+            "version": "0.2",
+            "phases": {
+              "install": {
+                "commands": [
+                  "npm install -g cdk-assets@latest"
+                ]
+              },
+              "build": {
+                "commands": [
+                  "cdk-assets --path \"assembly-Deploy-WebAppHosting/DeployWebAppHostingFC166BD5.assets.json\" --verbose publish \"1c5a2ab1d1e53b0672a644454aab3dbb258ccd0079c92ad0e23b95b2c2079f70:941377147791-ap-southeast-1\""
+                ]
+              }
+            }
+          }
+        Type: CODEPIPELINE
+    Metadata:
+      aws:cdk:path: AwsCdkStack/CdkPipeline/Assets/FileAsset2/Resource
+  CdkPipelineAssetsFileAsset3F5F50E93:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Artifacts:
+        Type: CODEPIPELINE
+      Cache:
+        Type: NO_CACHE
+      Description: Pipeline step CdkPipelineCrossAccount/Pipeline/Assets/FileAsset3
+      EncryptionKey:
+        Fn::GetAtt:
+          - ArtifactEncryptKeyFDBB6BD7
+          - Arn
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/standard:7.0
+        ImagePullCredentialsType: CODEBUILD
+        PrivilegedMode: false
+        Type: LINUX_CONTAINER
+      ServiceRole:
+        Fn::GetAtt:
+          - CdkPipelineAssetsFileRoleDBBCC980
+          - Arn
+      Source:
+        BuildSpec: |-
+          {
+            "version": "0.2",
+            "phases": {
+              "install": {
+                "commands": [
+                  "npm install -g cdk-assets@latest"
+                ]
+              },
+              "build": {
+                "commands": [
+                  "cdk-assets --path \"assembly-Deploy-WebAppHosting/DeployWebAppHostingFC166BD5.assets.json\" --verbose publish \"c6358465bf49dfae556bb430bf9c81fa578c221b82c308e3707901b1dd654762:941377147791-ap-southeast-1\""
+                ]
+              }
+            }
+          }
+        Type: CODEPIPELINE
+    Metadata:
+      aws:cdk:path: AwsCdkStack/CdkPipeline/Assets/FileAsset3/Resource
+  CdkPipelineAssetsFileAsset4ACA86EDA:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Artifacts:
+        Type: CODEPIPELINE
+      Cache:
+        Type: NO_CACHE
+      Description: Pipeline step CdkPipelineCrossAccount/Pipeline/Assets/FileAsset4
+      EncryptionKey:
+        Fn::GetAtt:
+          - ArtifactEncryptKeyFDBB6BD7
+          - Arn
+      Environment:
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/standard:7.0
+        ImagePullCredentialsType: CODEBUILD
+        PrivilegedMode: false
+        Type: LINUX_CONTAINER
+      ServiceRole:
+        Fn::GetAtt:
+          - CdkPipelineAssetsFileRoleDBBCC980
+          - Arn
+      Source:
+        BuildSpec: |-
+          {
+            "version": "0.2",
+            "phases": {
+              "install": {
+                "commands": [
+                  "npm install -g cdk-assets@latest"
+                ]
+              },
+              "build": {
+                "commands": [
+                  "cdk-assets --path \"assembly-Deploy-WebAppHosting/DeployWebAppHostingFC166BD5.assets.json\" --verbose publish \"7af76833a4e8a557447826b5a0047b91eaee63a08e5655c91362ec5af900f0d2:941377147791-ap-southeast-1\""
+                ]
+              }
+            }
+          }
+        Type: CODEPIPELINE
+    Metadata:
+      aws:cdk:path: AwsCdkStack/CdkPipeline/Assets/FileAsset4/Resource
   CDKMetadata:
     Type: AWS::CDK::Metadata
     Properties:
-      Analytics: v2:deflate64:H4sIAAAAAAAA/+1XS2/bMAz+LdOxUD2kvQy5JVkPQ7Y1SLrtYBSDLDOpGlkyRKmdIfi/D5Ifcdtt2KNBU6yADSskRX76yAjkSTJ6M0pGr9gtHvN8eyxFlviVZXxL2S1+9dsCEz+HKvUEFMskzKFaasus0IqMrXFQX9LZWs2hqimeJn7q+BZs6omBQt8wudBS8IqMSQ5oja4IJcxZ/RYkWDjProFbbBxRksW9c6jOYqi8k4PipipDyDkEV0dkKCNjMv+wiqK1NhxWq/e9Q6n5duEyKfiEc0CMmxvEDVDafBqUqW8hPDBr9DXlOodSlCCFgsQv2lXqSSf8yApoEXaii6oMos8jQgk3GnHCuXYqnBPJeM0kQqtYwkZotYRSCh4ZboJj69CAQ5jtDFeuLLWxMVs7G7TM2LNvwF3wcK4+lTmz0DFitISewQf5jHJmrFgzbqcDKqgnLM9Xlm2AjFNPMKz6s9aXB2EQ89XlJKy/QHal9bamghWJX2oZMsUQXQH5tCJjT0ojFBclk21OOgqiTdgw4T0zdYvgQi+6XV1xp77FZy3jV+9UANDryBH5DeWv/R6kNtTSoN5fiL2j3bHR/oE2hik76QkYYIya5je9i/vPQv41SXuHtvcAL7X4/K+APeTwMYn4x7Q/ek4ez+Hh1teTaGMfEWqKtm1hKLUuxxf63gX2M3FsVSwUoEIDNwh7EOJncaQnAvksuPnfT9o0+4OxLHNC5ruZbGF0mC1T39xvP3gaD41ZXdOZQ6uLJaB2hkM8brwHWsE9/cLoG5GDmTIEOkGEMIZthNrQbuzDZKZz6MeRoWO6p/eypkrnkFzj65uTk2R0moxeXaMQx8YpKwpIls33O5HMyuD1DwAA
+      Analytics: v2:deflate64:H4sIAAAAAAAA/+1YXW/aMBT9LfVj5WaifZl4A9aHiW1F0G0PEZoc50JdHDvyR7vIyn+fbCchbbVp3WD9GBIo4Vz73uNz7Yt8T5PB20EyOCK3+oTmmxPOssQtDKEbTG71N7cpdOKmUKUOgSAZhylUc2mIYVKgoVEW6iWerMQUqhrrs8SNLd2ASR1SUMgbwmeSM1qhIcpBGyUrhBGxRr4DDgYusmugRkdHGGVh7hSq8xAqb3EQVFWlDzkF7+oY9TE0RNOPiwCtpKKwWHzoHHJJNzObcUZHlILWYXJkHIni+IgsU9dQeDAs2mtMZQ4lK4EzAYmbNW+pQy34iRTQMGyhy6r00JcBwogqqfWIUmmFX6dGwxXhGhrDHNZMijmUnNGgcAyuG4cKrIbJduDClqVUJmRrO0Ybosz5d6DWe7gQn8ucGGgVUZJDp+CDfAacKMNWhJpxTwrsEMnzhSFrQMPUIe3furXWy2cxIOSrzYl//wrZlZSbGjNSJG4uuc8U0doWkI8rNHSoVExQVhLe5KSVIIzxE0a0U6ZuGFzKWTur3dypa/gZQ+jVe+EJdDZ0jH7D+Gu//5nV79LeSTqk7I51q0ZzNNeKCDPqBOhxDJb4G9/l/biQfyzS3qkdAjx9gMNxfflVcg853KUQf5n2nedkdw6f7/56IuuzJXZY1OtfVLhD+JKGmyuhr3RtibmU9/4/fwaHa4qBAoS/vPXCvh74RejyIki+Qu6Hlf5zODY/em2qzDKeb3tUMyV9ry11sW4/7hOdRw91jSdWG1nMQUurKISchLLZAPfsMyVvWA5qTDTgkdbgO1ZrJta47ZDpZCJz6Do3fcd4T99ljYXMIbnWb25OT5PBWTI4utaMnSgrDCsgmcfnD0EI268gFQAA
     Metadata:
       aws:cdk:path: AwsCdkStack/CDKMetadata/Default
 Parameters:
