@@ -186,7 +186,7 @@ Resources:
       aws:cdk:path: AwsCdkStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler
       aws:asset:path: asset.faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6
       aws:asset:property: Code
-  CdkPipelineRoleE3F28D69:
+  PipelineRoleD68726F7:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -197,8 +197,8 @@ Resources:
               Service: codepipeline.amazonaws.com
         Version: "2012-10-17"
     Metadata:
-      aws:cdk:path: AwsCdkStack/CdkPipeline/Pipeline/Role/Resource
-  CdkPipelineRoleDefaultPolicy5CDBB5CF:
+      aws:cdk:path: AwsCdkStack/Pipeline/Role/Resource
+  PipelineRoleDefaultPolicyC7A05455:
     Type: AWS::IAM::Policy
     Properties:
       PolicyDocument:
@@ -243,10 +243,10 @@ Resources:
                   - CdkPipelineCodeBuildActionRole28BA3E0C
                   - Arn
               - Fn::GetAtt:
-                  - CdkPipelineDeployProductionApproveProductionDeploymentCodePipelineActionRole1A67FCB9
+                  - PipelineDeployProductionApproveProductionDeploymentCodePipelineActionRoleC0C6B357
                   - Arn
               - Fn::GetAtt:
-                  - CdkPipelineDeployStagingApproveStagingDeploymentCodePipelineActionRole597202A0
+                  - PipelineDeployStagingApproveStagingDeploymentCodePipelineActionRole00F2A27C
                   - Arn
               - Fn::Join:
                   - ""
@@ -259,12 +259,12 @@ Resources:
                     - Ref: AWS::Partition
                     - :iam::941377147791:role/cdk-hnb659fds-deploy-role-941377147791-ap-southeast-1
         Version: "2012-10-17"
-      PolicyName: CdkPipelineRoleDefaultPolicy5CDBB5CF
+      PolicyName: PipelineRoleDefaultPolicyC7A05455
       Roles:
-        - Ref: CdkPipelineRoleE3F28D69
+        - Ref: PipelineRoleD68726F7
     Metadata:
-      aws:cdk:path: AwsCdkStack/CdkPipeline/Pipeline/Role/DefaultPolicy/Resource
-  CdkPipelineB1A1BEA2:
+      aws:cdk:path: AwsCdkStack/Pipeline/Role/DefaultPolicy/Resource
+  PipelineC660917D:
     Type: AWS::CodePipeline::Pipeline
     Properties:
       ArtifactStore:
@@ -277,11 +277,10 @@ Resources:
         Location:
           Ref: Artifacts82DD59A1
         Type: S3
-      PipelineType: V1
-      RestartExecutionOnUpdate: true
+      PipelineType: V2
       RoleArn:
         Fn::GetAtt:
-          - CdkPipelineRoleE3F28D69
+          - PipelineRoleD68726F7
           - Arn
       Stages:
         - Actions:
@@ -309,7 +308,7 @@ Resources:
                 Version: "1"
               Configuration:
                 ProjectName:
-                  Ref: CdkPipelineBuildSynthCdkBuildProject976C10F3
+                  Ref: PipelineBuildSynthCdkBuildProject1250E181
                 EnvironmentVariables: '[{"name":"_PROJECT_CONFIG_HASH","type":"PLAINTEXT","value":"37df7365bcd86398d4d14ac4081caf4bfc0b88d89175e1d03ad47d188eb1177c"}]'
               InputArtifacts:
                 - Name: khaihoan2711_aws_pipeline_cross_accounts_deployment_Source
@@ -366,7 +365,7 @@ Resources:
                 Provider: CloudFormation
                 Version: "1"
               Configuration:
-                StackName: CdkPipelineCrossAccount--WebAPI
+                StackName: CdkPipelineCrossAccount-dev-WebAPI
                 Capabilities: CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND
                 RoleArn:
                   Fn::Join:
@@ -379,7 +378,7 @@ Resources:
                 TemplatePath: Synth_Output::assembly-AwsCdkStack-DeployDevelop/AwsCdkStackDeployDevelopWebAPI11C35E55.template.json
               InputArtifacts:
                 - Name: Synth_Output
-              Name: CdkPipelineCrossAccount--WebAPI.Prepare
+              Name: CdkPipelineCrossAccount-dev-WebAPI.Prepare
               RoleArn:
                 Fn::Join:
                   - ""
@@ -393,10 +392,10 @@ Resources:
                 Provider: CloudFormation
                 Version: "1"
               Configuration:
-                StackName: CdkPipelineCrossAccount--WebAPI
+                StackName: CdkPipelineCrossAccount-dev-WebAPI
                 ActionMode: CHANGE_SET_EXECUTE
                 ChangeSetName: PipelineChange
-              Name: CdkPipelineCrossAccount--WebAPI.Deploy
+              Name: CdkPipelineCrossAccount-dev-WebAPI.Deploy
               RoleArn:
                 Fn::Join:
                   - ""
@@ -410,7 +409,7 @@ Resources:
                 Provider: CloudFormation
                 Version: "1"
               Configuration:
-                StackName: CdkPipelineCrossAccount--WebAppHosting
+                StackName: CdkPipelineCrossAccount-dev-FrontEnd
                 Capabilities: CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND
                 RoleArn:
                   Fn::Join:
@@ -420,10 +419,10 @@ Resources:
                       - :iam::941377147791:role/cdk-hnb659fds-cfn-exec-role-941377147791-ap-southeast-1
                 ActionMode: CHANGE_SET_REPLACE
                 ChangeSetName: PipelineChange
-                TemplatePath: Synth_Output::assembly-AwsCdkStack-DeployDevelop/AwsCdkStackDeployDevelopWebAppHostingE572400D.template.json
+                TemplatePath: Synth_Output::assembly-AwsCdkStack-DeployDevelop/AwsCdkStackDeployDevelopFrontEnd68534128.template.json
               InputArtifacts:
                 - Name: Synth_Output
-              Name: CdkPipelineCrossAccount--WebAppHosting.Prepare
+              Name: CdkPipelineCrossAccount-dev-FrontEnd.Prepare
               RoleArn:
                 Fn::Join:
                   - ""
@@ -437,10 +436,10 @@ Resources:
                 Provider: CloudFormation
                 Version: "1"
               Configuration:
-                StackName: CdkPipelineCrossAccount--WebAppHosting
+                StackName: CdkPipelineCrossAccount-dev-FrontEnd
                 ActionMode: CHANGE_SET_EXECUTE
                 ChangeSetName: PipelineChange
-              Name: CdkPipelineCrossAccount--WebAppHosting.Deploy
+              Name: CdkPipelineCrossAccount-dev-FrontEnd.Deploy
               RoleArn:
                 Fn::Join:
                   - ""
@@ -458,7 +457,7 @@ Resources:
               Name: ApproveStagingDeployment
               RoleArn:
                 Fn::GetAtt:
-                  - CdkPipelineDeployStagingApproveStagingDeploymentCodePipelineActionRole597202A0
+                  - PipelineDeployStagingApproveStagingDeploymentCodePipelineActionRole00F2A27C
                   - Arn
               RunOrder: 1
             - ActionTypeId:
@@ -467,7 +466,7 @@ Resources:
                 Provider: CloudFormation
                 Version: "1"
               Configuration:
-                StackName: CdkPipelineCrossAccount--WebAPI
+                StackName: CdkPipelineCrossAccount-stg-WebAPI
                 Capabilities: CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND
                 RoleArn:
                   Fn::Join:
@@ -480,7 +479,7 @@ Resources:
                 TemplatePath: Synth_Output::assembly-AwsCdkStack-DeployStaging/AwsCdkStackDeployStagingWebAPI70906F77.template.json
               InputArtifacts:
                 - Name: Synth_Output
-              Name: CdkPipelineCrossAccount--WebAPI.Prepare
+              Name: CdkPipelineCrossAccount-stg-WebAPI.Prepare
               RoleArn:
                 Fn::Join:
                   - ""
@@ -494,10 +493,10 @@ Resources:
                 Provider: CloudFormation
                 Version: "1"
               Configuration:
-                StackName: CdkPipelineCrossAccount--WebAPI
+                StackName: CdkPipelineCrossAccount-stg-WebAPI
                 ActionMode: CHANGE_SET_EXECUTE
                 ChangeSetName: PipelineChange
-              Name: CdkPipelineCrossAccount--WebAPI.Deploy
+              Name: CdkPipelineCrossAccount-stg-WebAPI.Deploy
               RoleArn:
                 Fn::Join:
                   - ""
@@ -511,7 +510,7 @@ Resources:
                 Provider: CloudFormation
                 Version: "1"
               Configuration:
-                StackName: CdkPipelineCrossAccount--WebAppHosting
+                StackName: CdkPipelineCrossAccount-stg-FrontEnd
                 Capabilities: CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND
                 RoleArn:
                   Fn::Join:
@@ -521,10 +520,10 @@ Resources:
                       - :iam::941377147791:role/cdk-hnb659fds-cfn-exec-role-941377147791-ap-southeast-1
                 ActionMode: CHANGE_SET_REPLACE
                 ChangeSetName: PipelineChange
-                TemplatePath: Synth_Output::assembly-AwsCdkStack-DeployStaging/AwsCdkStackDeployStagingWebAppHostingC8133D50.template.json
+                TemplatePath: Synth_Output::assembly-AwsCdkStack-DeployStaging/AwsCdkStackDeployStagingFrontEndF2F6F6F1.template.json
               InputArtifacts:
                 - Name: Synth_Output
-              Name: CdkPipelineCrossAccount--WebAppHosting.Prepare
+              Name: CdkPipelineCrossAccount-stg-FrontEnd.Prepare
               RoleArn:
                 Fn::Join:
                   - ""
@@ -538,10 +537,10 @@ Resources:
                 Provider: CloudFormation
                 Version: "1"
               Configuration:
-                StackName: CdkPipelineCrossAccount--WebAppHosting
+                StackName: CdkPipelineCrossAccount-stg-FrontEnd
                 ActionMode: CHANGE_SET_EXECUTE
                 ChangeSetName: PipelineChange
-              Name: CdkPipelineCrossAccount--WebAppHosting.Deploy
+              Name: CdkPipelineCrossAccount-stg-FrontEnd.Deploy
               RoleArn:
                 Fn::Join:
                   - ""
@@ -559,7 +558,7 @@ Resources:
               Name: ApproveProductionDeployment
               RoleArn:
                 Fn::GetAtt:
-                  - CdkPipelineDeployProductionApproveProductionDeploymentCodePipelineActionRole1A67FCB9
+                  - PipelineDeployProductionApproveProductionDeploymentCodePipelineActionRoleC0C6B357
                   - Arn
               RunOrder: 1
             - ActionTypeId:
@@ -568,7 +567,7 @@ Resources:
                 Provider: CloudFormation
                 Version: "1"
               Configuration:
-                StackName: CdkPipelineCrossAccount--WebAPI
+                StackName: CdkPipelineCrossAccount-prod-WebAPI
                 Capabilities: CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND
                 RoleArn:
                   Fn::Join:
@@ -581,7 +580,7 @@ Resources:
                 TemplatePath: Synth_Output::assembly-AwsCdkStack-DeployProduction/AwsCdkStackDeployProductionWebAPI692FF9BE.template.json
               InputArtifacts:
                 - Name: Synth_Output
-              Name: CdkPipelineCrossAccount--WebAPI.Prepare
+              Name: CdkPipelineCrossAccount-prod-WebAPI.Prepare
               RoleArn:
                 Fn::Join:
                   - ""
@@ -595,10 +594,10 @@ Resources:
                 Provider: CloudFormation
                 Version: "1"
               Configuration:
-                StackName: CdkPipelineCrossAccount--WebAPI
+                StackName: CdkPipelineCrossAccount-prod-WebAPI
                 ActionMode: CHANGE_SET_EXECUTE
                 ChangeSetName: PipelineChange
-              Name: CdkPipelineCrossAccount--WebAPI.Deploy
+              Name: CdkPipelineCrossAccount-prod-WebAPI.Deploy
               RoleArn:
                 Fn::Join:
                   - ""
@@ -612,7 +611,7 @@ Resources:
                 Provider: CloudFormation
                 Version: "1"
               Configuration:
-                StackName: CdkPipelineCrossAccount--WebAppHosting
+                StackName: CdkPipelineCrossAccount-prod-FrontEnd
                 Capabilities: CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND
                 RoleArn:
                   Fn::Join:
@@ -622,10 +621,10 @@ Resources:
                       - :iam::825765401882:role/cdk-hnb659fds-cfn-exec-role-825765401882-ap-southeast-1
                 ActionMode: CHANGE_SET_REPLACE
                 ChangeSetName: PipelineChange
-                TemplatePath: Synth_Output::assembly-AwsCdkStack-DeployProduction/AwsCdkStackDeployProductionWebAppHosting6283644E.template.json
+                TemplatePath: Synth_Output::assembly-AwsCdkStack-DeployProduction/AwsCdkStackDeployProductionFrontEndC7072D99.template.json
               InputArtifacts:
                 - Name: Synth_Output
-              Name: CdkPipelineCrossAccount--WebAppHosting.Prepare
+              Name: CdkPipelineCrossAccount-prod-FrontEnd.Prepare
               RoleArn:
                 Fn::Join:
                   - ""
@@ -639,10 +638,10 @@ Resources:
                 Provider: CloudFormation
                 Version: "1"
               Configuration:
-                StackName: CdkPipelineCrossAccount--WebAppHosting
+                StackName: CdkPipelineCrossAccount-prod-FrontEnd
                 ActionMode: CHANGE_SET_EXECUTE
                 ChangeSetName: PipelineChange
-              Name: CdkPipelineCrossAccount--WebAppHosting.Deploy
+              Name: CdkPipelineCrossAccount-prod-FrontEnd.Deploy
               RoleArn:
                 Fn::Join:
                   - ""
@@ -652,11 +651,11 @@ Resources:
               RunOrder: 5
           Name: DeployProduction
     DependsOn:
-      - CdkPipelineRoleDefaultPolicy5CDBB5CF
-      - CdkPipelineRoleE3F28D69
+      - PipelineRoleDefaultPolicyC7A05455
+      - PipelineRoleD68726F7
     Metadata:
-      aws:cdk:path: AwsCdkStack/CdkPipeline/Pipeline/Resource
-  CdkPipelineSourcekhaihoan2711awspipelinecrossaccountsdeploymentWebhookResourceFEEDB425:
+      aws:cdk:path: AwsCdkStack/Pipeline/Resource
+  PipelineSourcekhaihoan2711awspipelinecrossaccountsdeploymentWebhookResource9C912C2D:
     Type: AWS::CodePipeline::Webhook
     Properties:
       Authentication: GITHUB_HMAC
@@ -668,11 +667,11 @@ Resources:
       RegisterWithThirdParty: true
       TargetAction: khaihoan2711_aws-pipeline-cross-accounts-deployment
       TargetPipeline:
-        Ref: CdkPipelineB1A1BEA2
+        Ref: PipelineC660917D
       TargetPipelineVersion: 1
     Metadata:
-      aws:cdk:path: AwsCdkStack/CdkPipeline/Pipeline/Source/khaihoan2711_aws-pipeline-cross-accounts-deployment/WebhookResource
-  CdkPipelineBuildSynthCdkBuildProjectRole6EF1C931:
+      aws:cdk:path: AwsCdkStack/Pipeline/Source/khaihoan2711_aws-pipeline-cross-accounts-deployment/WebhookResource
+  PipelineBuildSynthCdkBuildProjectRole808C155A:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -683,8 +682,8 @@ Resources:
               Service: codebuild.amazonaws.com
         Version: "2012-10-17"
     Metadata:
-      aws:cdk:path: AwsCdkStack/CdkPipeline/Pipeline/Build/Synth/CdkBuildProject/Role/Resource
-  CdkPipelineBuildSynthCdkBuildProjectRoleDefaultPolicyA91CEA78:
+      aws:cdk:path: AwsCdkStack/Pipeline/Build/Synth/CdkBuildProject/Role/Resource
+  PipelineBuildSynthCdkBuildProjectRoleDefaultPolicyE35C3CF9:
     Type: AWS::IAM::Policy
     Properties:
       PolicyDocument:
@@ -698,12 +697,12 @@ Resources:
               - Fn::Join:
                   - ""
                   - - arn:aws:logs:ap-southeast-1:475174330998:log-group:/aws/codebuild/
-                    - Ref: CdkPipelineBuildSynthCdkBuildProject976C10F3
+                    - Ref: PipelineBuildSynthCdkBuildProject1250E181
                     - :*
               - Fn::Join:
                   - ""
                   - - arn:aws:logs:ap-southeast-1:475174330998:log-group:/aws/codebuild/
-                    - Ref: CdkPipelineBuildSynthCdkBuildProject976C10F3
+                    - Ref: PipelineBuildSynthCdkBuildProject1250E181
           - Action:
               - codebuild:BatchPutCodeCoverages
               - codebuild:BatchPutTestCases
@@ -715,7 +714,7 @@ Resources:
               Fn::Join:
                 - ""
                 - - arn:aws:codebuild:ap-southeast-1:475174330998:report-group/
-                  - Ref: CdkPipelineBuildSynthCdkBuildProject976C10F3
+                  - Ref: PipelineBuildSynthCdkBuildProject1250E181
                   - -*
           - Action:
               - s3:Abort*
@@ -751,12 +750,12 @@ Resources:
                 - ArtifactEncryptKeyFDBB6BD7
                 - Arn
         Version: "2012-10-17"
-      PolicyName: CdkPipelineBuildSynthCdkBuildProjectRoleDefaultPolicyA91CEA78
+      PolicyName: PipelineBuildSynthCdkBuildProjectRoleDefaultPolicyE35C3CF9
       Roles:
-        - Ref: CdkPipelineBuildSynthCdkBuildProjectRole6EF1C931
+        - Ref: PipelineBuildSynthCdkBuildProjectRole808C155A
     Metadata:
-      aws:cdk:path: AwsCdkStack/CdkPipeline/Pipeline/Build/Synth/CdkBuildProject/Role/DefaultPolicy/Resource
-  CdkPipelineBuildSynthCdkBuildProject976C10F3:
+      aws:cdk:path: AwsCdkStack/Pipeline/Build/Synth/CdkBuildProject/Role/DefaultPolicy/Resource
+  PipelineBuildSynthCdkBuildProject1250E181:
     Type: AWS::CodeBuild::Project
     Properties:
       Artifacts:
@@ -776,7 +775,7 @@ Resources:
         Type: LINUX_CONTAINER
       ServiceRole:
         Fn::GetAtt:
-          - CdkPipelineBuildSynthCdkBuildProjectRole6EF1C931
+          - PipelineBuildSynthCdkBuildProjectRole808C155A
           - Arn
       Source:
         BuildSpec: |-
@@ -799,8 +798,8 @@ Resources:
           }
         Type: CODEPIPELINE
     Metadata:
-      aws:cdk:path: AwsCdkStack/CdkPipeline/Pipeline/Build/Synth/CdkBuildProject/Resource
-  CdkPipelineDeployStagingApproveStagingDeploymentCodePipelineActionRole597202A0:
+      aws:cdk:path: AwsCdkStack/Pipeline/Build/Synth/CdkBuildProject/Resource
+  PipelineDeployStagingApproveStagingDeploymentCodePipelineActionRole00F2A27C:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -811,8 +810,8 @@ Resources:
               AWS: arn:aws:iam::475174330998:root
         Version: "2012-10-17"
     Metadata:
-      aws:cdk:path: AwsCdkStack/CdkPipeline/Pipeline/DeployStaging/ApproveStagingDeployment/CodePipelineActionRole/Resource
-  CdkPipelineDeployProductionApproveProductionDeploymentCodePipelineActionRole1A67FCB9:
+      aws:cdk:path: AwsCdkStack/Pipeline/DeployStaging/ApproveStagingDeployment/CodePipelineActionRole/Resource
+  PipelineDeployProductionApproveProductionDeploymentCodePipelineActionRoleC0C6B357:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -823,7 +822,7 @@ Resources:
               AWS: arn:aws:iam::475174330998:root
         Version: "2012-10-17"
     Metadata:
-      aws:cdk:path: AwsCdkStack/CdkPipeline/Pipeline/DeployProduction/ApproveProductionDeployment/CodePipelineActionRole/Resource
+      aws:cdk:path: AwsCdkStack/Pipeline/DeployProduction/ApproveProductionDeployment/CodePipelineActionRole/Resource
   CdkPipelineCodeBuildActionRole28BA3E0C:
     Type: AWS::IAM::Role
     Properties:
@@ -834,7 +833,7 @@ Resources:
             Principal:
               AWS:
                 Fn::GetAtt:
-                  - CdkPipelineRoleE3F28D69
+                  - PipelineRoleD68726F7
                   - Arn
         Version: "2012-10-17"
     Metadata:
@@ -854,10 +853,10 @@ Resources:
                   - CdkPipelineAssetsFileAsset0FD9F033
                   - Arn
               - Fn::GetAtt:
-                  - CdkPipelineBuildSynthCdkBuildProject976C10F3
+                  - CdkPipelineUpdatePipelineSelfMutation81360810
                   - Arn
               - Fn::GetAtt:
-                  - CdkPipelineUpdatePipelineSelfMutation81360810
+                  - PipelineBuildSynthCdkBuildProject1250E181
                   - Arn
         Version: "2012-10-17"
       PolicyName: CdkPipelineCodeBuildActionRoleDefaultPolicyA6A0177D
@@ -1099,7 +1098,7 @@ Resources:
   CDKMetadata:
     Type: AWS::CDK::Metadata
     Properties:
-      Analytics: v2:deflate64:H4sIAAAAAAAA/+1Y3U/bMBD/W/AjMpkKL1Pf2o6HqduoWrY9RNXkONdi6tiRz4FFVv73yc4HGWwT0CJgVEoU577vfvbJ9nE0eD+IBgfsGo94ujmSIoncwjK+oewaf7hNhpGbQhk7AoolEqZQzrVlVmhFhtYUUC3pZKWmUFYUTyI3LvgGbOyIgUxfMTnTUvCSDEkKaI0uCSWssPoDSLBwllwCt1gboiQJulMoT4OrtKWD4qbMvcspeFOHpE8jQzL9vAiklTYcFotPnUGp+WZWJFLwEeeAGJTriOtAaf2po4xdE8IdsZpfUa5TyEUOUiiI3KwZxY60xC8sgybClnRe5p70bUAo4UYjjjjXhfJ5IhmumERoGHNYC63mkEvBQ4Vr59gYNFAgTG4EF0Wea2MDWjcyaJmxpz+BF97Cmfqap8xCWxGjJXQVvINnoDNjxYpxO+6VgjrC0nRh2RrIMHYE/ajLtVr+JwIB8RZVP/4OyYXWm4oKlkVurqXHmiEWGaTjkgwdyY1QXORMNqi2RQwyXmHEu9pWTQTnetZqtcsjdk181jJ+8VH5ADoeOST3YP7b7p77hrl+1fc6034C/8bdqhprw5QddexePoFT/9Mux+fx1bTwB+qHqj2slI8G/8lDe3IH+zX2+lvbE2C4y0JsCfvOMdmdwe3V7z4vdMI+mhs2p36i0ea04udfC/y5vtXV/kYO+18LGSh/rui53ZNfKPlVwPxMQb6K2rz1TOtTde8GJSmETG+uT2ZG+2ug+M9t3D+1hVqsquikQKuzOaAuDIeQbuiNDeEWf2b0lUjBjBkCHSGCvzFZC7Wm7Q0NRhOdQnfu7xum+/de77KiSqcQXeK7q+PjaHASDQ4uUYgjUygrMojm9fcXA7j9GHAUAAA=
+      Analytics: v2:deflate64:H4sIAAAAAAAA/+1Y3W/aMBD/W+pHZDxBXybegO1hyj4iQNtDVE2Oc1ATx45shyqy8r9PzgewdpvaAmpZkWLZud99+e5iOTckg/cDMriid6bPkrQveEzc3FKWYnpnfro0M8QFUEYOgaSxgADKmbLUciXRyOoCqhs8XcoAygqba+ImBUvBRg5pyNSGilAJzko0QgkYq1WJMKKFVR9AgIVv8RqYNY0ijOJaNoDyY20q6eggmS5zbzIAr6qH9mlohIIv85q0VJrBfP55q1AoloZFLDgbMwbG1MKNx42juJkaLyPXuvCArcErzFQCOc9BcAnEhe0qcohqy5eU2clOHqOOc1HmgEbo+xBV2CGaJHNLV4BGkUPGr77SDFqT/wlDHbouPH79A+JbpdIKc5oRN1OiDpoxRQbJpEQjh3LNJeM5FWPGVCG7GDY8XmDM2mz3UNV6sFBhJ9XVWeRa/6yl7PaT9A5sMdRDjwD/rfeCvmFUK7Grc3wp4N/Rg6Kx0lTa8Rbe20+NNO94u8eXseUVPF2+jtrTQvns5J/ctZMbuHxj53+0nSCHxwzEgWk/ek6Op/Bw8YfPKy3YZ6P15dQXGm6v/b7+usQv1L1T7W/k+v5rIQPpf2D2zF7Ir5R8Fml+ISfPIjZvfafNX/VeKyIuuEh2fYhQK99Pif58jPun0dCwVRWeFsaqbAZGFZpBvd36bGwJ9/BQqw1PQE+oATw2BqzvAHC5wvsa8GU8atzgrj1kyFQl0CWxwlIlQNbm3WY4JINrMrhaG877upCWZ0BmzfwL1LpFi7kTAAA=
     Metadata:
       aws:cdk:path: AwsCdkStack/CDKMetadata/Default
 Parameters:

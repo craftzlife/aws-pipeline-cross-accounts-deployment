@@ -3,7 +3,7 @@ import { Construct } from 'constructs';
 import { AwsEnv } from '../bin/configs';
 import path = require('path');
 
-export interface FrontEndStackProps extends cdk.StackProps{
+export interface FrontEndStackProps extends cdk.StackProps {
   restApiId: cdk.CfnOutput;
 }
 export class FrontEndStack extends cdk.Stack {
@@ -11,7 +11,9 @@ export class FrontEndStack extends cdk.Stack {
     super(scope, id, props);
 
     const _TestBucket = new cdk.aws_s3.Bucket(this, 'TestBucket', {
-        bucketName: props.restApiId.value
+      bucketName: props.restApiId.value,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+      autoDeleteObjects: true,
     })
 
     const _HostingBucket = new cdk.aws_s3.Bucket(this, 'HostingBucket', {
@@ -22,14 +24,14 @@ export class FrontEndStack extends cdk.Stack {
       enforceSSL: true,
       blockPublicAccess: cdk.aws_s3.BlockPublicAccess.BLOCK_ALL,
     });
-    
+
     const _S3Deployment = new cdk.aws_s3_deployment.BucketDeployment(this, 'S3Deployment', {
       sources: [
         cdk.aws_s3_deployment.Source.asset(path.resolve(process.cwd(), '../angular-static-webapp'), {
           bundling: {
             image: cdk.DockerImage.fromRegistry('node:22'),
             command: [
-              'sh', '-c', 
+              'sh', '-c',
               [
                 'npm i',
                 'npm run build',
@@ -46,7 +48,7 @@ export class FrontEndStack extends cdk.Stack {
       // distributionPaths: '',
       // serverSideEncryptionAwsKmsKeyId: 'alias/aws/s3',
     });
-    
+
     // Temporary disable cloudfront as AWS require account to be verified before using
     // const _CloudFrontDistribution = new cdk.aws_cloudfront.Distribution(this, 'CloudfrontDistribution', {
     //   defaultBehavior: {
