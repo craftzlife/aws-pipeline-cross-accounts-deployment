@@ -2,7 +2,10 @@ import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { AwsEnv } from '../../bin/configs';
 
-export class WebAPIStack extends cdk.Stack{
+export class WebAPIStack extends cdk.Stack {
+
+  public readonly restApiUrl: cdk.CfnOutput;
+
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
@@ -21,6 +24,9 @@ export class WebAPIStack extends cdk.Stack{
         `),
       }),
     });
-  }
 
+    this.restApiUrl = new cdk.CfnOutput(this, 'RestApiUrl', {
+      value: _WebAPI.url,
+    });
+  }
 }

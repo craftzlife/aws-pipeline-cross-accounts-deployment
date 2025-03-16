@@ -37,11 +37,14 @@ export class AwsCdkPipelineStack extends Stack {
       publishAssetsInParallel: false,
     });
 
-    const _FrontendDeployStage = new FrontEndDeployStage(scope, 'FrontEnd');
-    cdkPipeline.addStage(_FrontendDeployStage);
-
     const _WebAPIDeployStage = new WebAPIDeployStage(this, 'WebAPI');
     cdkPipeline.addStage(_WebAPIDeployStage);
+
+    const _FrontendDeployStage = new FrontEndDeployStage(scope, 'FrontEnd', {
+      restApiUrl: _WebAPIDeployStage.restApiUrl
+    });
+    cdkPipeline.addStage(_FrontendDeployStage);
+
   }
 }
 
@@ -55,20 +58,29 @@ export class AwsCdkPipelineStack extends Stack {
 //   }
 // }
 export class WebAPIDeployStage extends cdk.Stage {
+
+  public readonly restApiUrl: cdk.CfnOutput;
+
   constructor(scope: Construct, id: string, props?: cdk.StageProps) {
     super(scope, id, props);
 
-    new WebAPIStack(this, 'WebAPI', {
+    const webapi = new WebAPIStack(this, 'WebAPI', {
       stackName: [configs.ProductName, 'WebAPI'].join('-'),
       env: AwsEnv.develop,
     });
+
+    this.restApiUrl = webapi.restApiUrl;
   }
 }
+
+export interface FrontEndDeployStageProps extends cdk.StageProps {
+  restApiUrl: cdk.CfnOutput;
+}
 export class FrontEndDeployStage extends cdk.Stage {
-  constructor(scope: Construct, id: string, props?: cdk.StageProps) {
+  constructor(scope: Construct, id: string, props?: FrontEndDeployStageProps) {
     super(scope, id, props);
 
-    new FrontEndStack(this, 'WebAppHosting', {
+    const frontend = new FrontEndStack(this, 'WebAppHosting', {
       stackName: [configs.ProductName, 'WebAppHosting'].join('-'),
       env: AwsEnv.develop,
     });

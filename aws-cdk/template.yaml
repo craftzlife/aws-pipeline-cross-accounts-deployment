@@ -345,52 +345,6 @@ Resources:
                 Provider: CloudFormation
                 Version: "1"
               Configuration:
-                StackName: CdkPipelineCrossAccount-WebAppHosting
-                Capabilities: CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND
-                RoleArn:
-                  Fn::Join:
-                    - ""
-                    - - "arn:"
-                      - Ref: AWS::Partition
-                      - :iam::941377147791:role/cdk-hnb659fds-cfn-exec-role-941377147791-ap-southeast-1
-                ActionMode: CHANGE_SET_REPLACE
-                ChangeSetName: PipelineChange
-                TemplatePath: Synth_Output::assembly-Frontend/FrontendWebAppHostingDCE6962A.template.json
-              InputArtifacts:
-                - Name: Synth_Output
-              Name: Prepare
-              RoleArn:
-                Fn::Join:
-                  - ""
-                  - - "arn:"
-                    - Ref: AWS::Partition
-                    - :iam::941377147791:role/cdk-hnb659fds-deploy-role-941377147791-ap-southeast-1
-              RunOrder: 1
-            - ActionTypeId:
-                Category: Deploy
-                Owner: AWS
-                Provider: CloudFormation
-                Version: "1"
-              Configuration:
-                StackName: CdkPipelineCrossAccount-WebAppHosting
-                ActionMode: CHANGE_SET_EXECUTE
-                ChangeSetName: PipelineChange
-              Name: Deploy
-              RoleArn:
-                Fn::Join:
-                  - ""
-                  - - "arn:"
-                    - Ref: AWS::Partition
-                    - :iam::941377147791:role/cdk-hnb659fds-deploy-role-941377147791-ap-southeast-1
-              RunOrder: 2
-          Name: Frontend
-        - Actions:
-            - ActionTypeId:
-                Category: Deploy
-                Owner: AWS
-                Provider: CloudFormation
-                Version: "1"
-              Configuration:
                 StackName: CdkPipelineCrossAccount-WebAPI
                 Capabilities: CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND
                 RoleArn:
@@ -430,6 +384,52 @@ Resources:
                     - :iam::941377147791:role/cdk-hnb659fds-deploy-role-941377147791-ap-southeast-1
               RunOrder: 2
           Name: WebAPI
+        - Actions:
+            - ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CloudFormation
+                Version: "1"
+              Configuration:
+                StackName: CdkPipelineCrossAccount-WebAppHosting
+                Capabilities: CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND
+                RoleArn:
+                  Fn::Join:
+                    - ""
+                    - - "arn:"
+                      - Ref: AWS::Partition
+                      - :iam::941377147791:role/cdk-hnb659fds-cfn-exec-role-941377147791-ap-southeast-1
+                ActionMode: CHANGE_SET_REPLACE
+                ChangeSetName: PipelineChange
+                TemplatePath: Synth_Output::assembly-FrontEnd/FrontEndWebAppHosting8D90A052.template.json
+              InputArtifacts:
+                - Name: Synth_Output
+              Name: Prepare
+              RoleArn:
+                Fn::Join:
+                  - ""
+                  - - "arn:"
+                    - Ref: AWS::Partition
+                    - :iam::941377147791:role/cdk-hnb659fds-deploy-role-941377147791-ap-southeast-1
+              RunOrder: 1
+            - ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CloudFormation
+                Version: "1"
+              Configuration:
+                StackName: CdkPipelineCrossAccount-WebAppHosting
+                ActionMode: CHANGE_SET_EXECUTE
+                ChangeSetName: PipelineChange
+              Name: Deploy
+              RoleArn:
+                Fn::Join:
+                  - ""
+                  - - "arn:"
+                    - Ref: AWS::Partition
+                    - :iam::941377147791:role/cdk-hnb659fds-deploy-role-941377147791-ap-southeast-1
+              RunOrder: 2
+          Name: FrontEnd
     DependsOn:
       - CdkPipelineRoleDefaultPolicy5CDBB5CF
       - CdkPipelineRoleE3F28D69
