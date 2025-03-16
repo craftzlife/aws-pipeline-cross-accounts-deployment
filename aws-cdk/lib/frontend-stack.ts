@@ -3,7 +3,7 @@ import { Construct } from 'constructs';
 import { AwsEnv } from '../bin/configs';
 import path = require('path');
 
-export class WebAppHostingStack extends cdk.Stack {
+export class FrontendStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 

@@ -355,7 +355,7 @@ Resources:
                       - :iam::941377147791:role/cdk-hnb659fds-cfn-exec-role-941377147791-ap-southeast-1
                 ActionMode: CHANGE_SET_REPLACE
                 ChangeSetName: PipelineChange
-                TemplatePath: Synth_Output::assembly-Deploy-WebAppHosting/DeployWebAppHostingFC166BD5.template.json
+                TemplatePath: Synth_Output::assembly-Frontend/FrontendWebAppHostingDCE6962A.template.json
               InputArtifacts:
                 - Name: Synth_Output
               Name: Prepare
@@ -383,7 +383,53 @@ Resources:
                     - Ref: AWS::Partition
                     - :iam::941377147791:role/cdk-hnb659fds-deploy-role-941377147791-ap-southeast-1
               RunOrder: 2
-          Name: Deploy-WebAppHosting
+          Name: Frontend
+        - Actions:
+            - ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CloudFormation
+                Version: "1"
+              Configuration:
+                StackName: CdkPipelineCrossAccount-WebAPI
+                Capabilities: CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND
+                RoleArn:
+                  Fn::Join:
+                    - ""
+                    - - "arn:"
+                      - Ref: AWS::Partition
+                      - :iam::941377147791:role/cdk-hnb659fds-cfn-exec-role-941377147791-ap-southeast-1
+                ActionMode: CHANGE_SET_REPLACE
+                ChangeSetName: PipelineChange
+                TemplatePath: Synth_Output::assembly-AwsCdkStack-WebAPI/AwsCdkStackWebAPI877D820E.template.json
+              InputArtifacts:
+                - Name: Synth_Output
+              Name: Prepare
+              RoleArn:
+                Fn::Join:
+                  - ""
+                  - - "arn:"
+                    - Ref: AWS::Partition
+                    - :iam::941377147791:role/cdk-hnb659fds-deploy-role-941377147791-ap-southeast-1
+              RunOrder: 1
+            - ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CloudFormation
+                Version: "1"
+              Configuration:
+                StackName: CdkPipelineCrossAccount-WebAPI
+                ActionMode: CHANGE_SET_EXECUTE
+                ChangeSetName: PipelineChange
+              Name: Deploy
+              RoleArn:
+                Fn::Join:
+                  - ""
+                  - - "arn:"
+                    - Ref: AWS::Partition
+                    - :iam::941377147791:role/cdk-hnb659fds-deploy-role-941377147791-ap-southeast-1
+              RunOrder: 2
+          Name: WebAPI
     DependsOn:
       - CdkPipelineRoleDefaultPolicy5CDBB5CF
       - CdkPipelineRoleE3F28D69
@@ -807,7 +853,7 @@ Resources:
   CDKMetadata:
     Type: AWS::CDK::Metadata
     Properties:
-      Analytics: v2:deflate64:H4sIAAAAAAAA/+1XTW/bMAz9LdWxUD2kvQy5JVkPQ7Y1SLrtYBSDLDOpGlkyRKmdIfi/D5I/4rbYsK0NlmIFbFghKfLpkRHI02T0dpSMjtgdnvB8eyJFlviVZXxL2R1+89sCEz+HKvUEFMskzKFaasus0IqMrXFQX9HZWs2hqimeJX7q+BZs6omBQt8yudBS8IqMSQ5oja4IJcxZ/Q4kWLjIboBbbBxRksW9c6jOY6i8k4PipipDyDkEV8dkKCNjMv+4iqK1NhxWqw+9Q6n5duEyKfiEc0CMmxvEDVDafBqUqW8hPDJr9DXlOodSlCCFgsQv2lXqSSf8xApoEXaiy6oMoi8jQgk3GnHCuXYqnBPJeM0kQqtYwkZotYRSCh4ZboJj69CAQ5jtDFeuLLWxMVs7G7TM2PPvwF3wcKE+lzmz0DFitISewUf5jHJmrFgzbqcDKqgnLM9Xlm2AjFNPMKz6s9ZXB2EQ89XlJKy/Qnat9bamghWJX2oZMsUQXQH5tCJjT0ojFBclk21OOgqiTdgw4T0zdYvgUi+6XV1xp77FZy3j1+9VANDryDH5DeWv/R6kNtTSoN5fib2n3bHR/oE2hik76QkYYIya5je9j/vPQv41SXuHtvcAr7X48q+APeTwOYl4YtqfPSfP5/Dp25/u5BC1saEIxUXb/jDUXJfsS/3gJvuZOPYsFgpQoZMbhD0I8Ys40j8C+SK4+d9P2nT9g/ksc0Lmu+FsYXQYMlM/vKnuPY2Hxqyu6cyh1cUSUDvDIR433gOt4IF+YfStyMFMGQKdIEKYxzZCbWg3/2Ey0zn0c8nQMd3Te1VTpXNIbvDN7elpMjpLRkc3KMSJccqKApJl8/0BxcsSTP4PAAA=
+      Analytics: v2:deflate64:H4sIAAAAAAAA/+1X30/bMBD+W/AjMpkKL1Pf2o6HqduoWrY9RAg5zrWYOnbks2GRlf99svOjAbRpGyDWDalVnLvz3efvcyzfcTJ6O0pGB+wWj3i+PZIiS/zKMr6l7BYv/bbAxM+hSj0BxTIJc6iW2jIrtCJjaxzUF3S2VnOoaooniZ86vgWbemKg0DdMLrQUvCJjkgNaoytCCXNWvwMJFs6ya+AWm0SUZHHuHKrTWCrv7KC4qcpQcg4h1SEZ2siYzD+uommtDYfV6kOfUGq+XbhMCj7hHBDj5AZxA5Q2jwZl6lsID8Iaf025zqEUJUihIPGLdpR60hk/sQJahJ3pvCqD6cuIUMKNRpxwrp0K60QyXjOJ0DqWsBFaLaGUgkeGm+LYJjTgEGa7wJUrS21sVGsXg5YZe/oNuAsZztTnMmcWOkaMltAz+EDPaGfGijXjdjqggnrC8nxl2QbIOPUEw6hfa32xHwFR0E60MP4K2ZXW25oKViR+qWWQkiG6AvJpRcaelEYoLkomW9E6jmJMmDDhPXV1i+BcL7pZ3e5PfYvPWsav3qsAoPeRQ/ILzp/n/ee8YaMOPqZXUe54d2y0X+fGMGUnPQEDjNHTvNO7uH+v5B+T9OzQnr3A617c/yPgGTR8SiIeKfuTa/J0CR8//fFJ/kZvvIyEzUXby2fYc53Y5/reSfYjc7zvWChAhWvioOwemveCgBcCuRfc/O8rbfqLQauYOSHzXZ+4MDr0u6kfnmt3fk2GJqyu6cyh1cUSUDvDIS43nhqt4Z5/YfSNyMFMGQKdIEJoDTdCbWjXimIy0zn0HdAwMX2h/0VNlc4hucY3N8fHyegkGR1coxBHxikrCkiWzfM7UcCixKkQAAA=
     Metadata:
       aws:cdk:path: AwsCdkStack/CDKMetadata/Default
 Parameters:
