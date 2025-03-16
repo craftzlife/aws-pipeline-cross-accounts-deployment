@@ -37,8 +37,25 @@ export class AwsCdkPipelineStack extends Stack {
       publishAssetsInParallel: false,
     });
 
-    const _PipelineDeployStage = new CdkPipelineDeployStage(this, 'WebAPI');
-    cdkPipeline.addStage(_PipelineDeployStage);
+    const deployDev = new CdkPipelineDeployStage(this, 'DeployDevelop', {
+      env: AwsEnv.develop,
+      alias: 'dev',
+    });
+    cdkPipeline.addStage(deployDev);
+
+
+    const deployStaging = new CdkPipelineDeployStage(this, 'DeployStaging', {
+      env: AwsEnv.staging,
+      alias: 'stg',
+    });
+    cdkPipeline.addStage(deployStaging).addPre(new cdk.pipelines.ManualApprovalStep('ApproveStagingDeployment'));
+    
+    const deployProduction = new CdkPipelineDeployStage(this, 'DeployProduction', {
+      env: AwsEnv.product,
+      alias: 'prod',
+    });
+    cdkPipeline.addStage(deployProduction).addPre(new cdk.pipelines.ManualApprovalStep('ApproveProductionDeployment'));
+    // Add Approve step before execute CloudFormation changeset
 
     // const _FrontendDeployStage = new FrontEndDeployStage(scope, 'FrontEnd', {
     //   restApiId: _WebAPIDeployStage.restApiUrl
@@ -57,19 +74,22 @@ export class AwsCdkPipelineStack extends Stack {
 //     });
 //   }
 // }
+
+export interface CdkPipelineDeployStageProps extends cdk.StageProps {
+  /** Alias of the application, used to name the stack */
+  alias?: string
+}
 export class CdkPipelineDeployStage extends cdk.Stage {
 
-  constructor(scope: Construct, id: string, props?: cdk.StageProps) {
+  constructor(scope: Construct, id: string, props?: CdkPipelineDeployStageProps) {
     super(scope, id, props);
 
     const webapi = new WebAPIStack(this, 'WebAPI', {
-      stackName: [configs.ProductName, 'WebAPI'].join('-'),
-      env: AwsEnv.develop,
+      stackName: [configs.ProductName, props?.alias, 'WebAPI'].join('-')
     });
 
     const frontend = new FrontEndStack(this, 'WebAppHosting', {
-      stackName: [configs.ProductName, 'WebAppHosting'].join('-'),
-      env: AwsEnv.develop,
+      stackName: [configs.ProductName, props?.alias, 'WebAppHosting'].join('-'),
       restApiId: webapi.restApiId
     });
   }
