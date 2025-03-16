@@ -4,7 +4,7 @@ import { AwsEnv } from '../../bin/configs';
 
 export class WebAPIStack extends cdk.Stack {
 
-  public readonly restApiUrl: cdk.CfnOutput;
+  public readonly restApiId: cdk.CfnOutput;
 
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -25,8 +25,8 @@ export class WebAPIStack extends cdk.Stack {
       }),
     });
 
-    this.restApiUrl = new cdk.CfnOutput(this, 'RestApiUrl', {
-      value: _WebAPI.url,
+    this.restApiId = new cdk.CfnOutput(this, 'RestApiUrl', {
+      value: _WebAPI.restApiId,
     });
   }
 }

@@ -3,9 +3,16 @@ import { Construct } from 'constructs';
 import { AwsEnv } from '../bin/configs';
 import path = require('path');
 
-export class FrontendStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+export interface FrontEndStackProps extends cdk.StackProps{
+  restApiId: cdk.CfnOutput;
+}
+export class FrontEndStack extends cdk.Stack {
+  constructor(scope: Construct, id: string, props: FrontEndStackProps) {
     super(scope, id, props);
+
+    const _TestBucket = new cdk.aws_s3.Bucket(this, 'TestBucket', {
+        bucketName: props.restApiId.value
+    })
 
     const _HostingBucket = new cdk.aws_s3.Bucket(this, 'HostingBucket', {
       removalPolicy: cdk.RemovalPolicy.DESTROY,
