@@ -88,8 +88,8 @@ export class CdkPipelineDeployStage extends cdk.Stage {
       stackName: [configs.ProductName, props?.alias, 'WebAPI'].join('-')
     });
 
-    const frontend = new FrontEndStack(this, 'WebAppHosting', {
-      stackName: [configs.ProductName, props?.alias, 'WebAppHosting'].join('-'),
+    const frontend = new FrontEndStack(this, 'FrontEnd', {
+      stackName: [configs.ProductName, props?.alias, 'FrontEnd'].join('-'),
       restApiId: webapi.restApiId
     });
   }
