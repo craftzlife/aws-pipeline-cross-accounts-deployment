@@ -3,7 +3,6 @@ import { Construct } from 'constructs';
 import { AwsEnv } from '../bin/configs';
 import * as cdk from 'aws-cdk-lib';
 import { FrontEndStack as FrontEndStack } from './frontend-stack';
-import { CrossAccountSupportStack } from './cross-account-support-stack';
 import * as configs from '../bin/configs';
 import { WebAPIStack } from './backend/webapi-stack';
 export class AwsCdkPipelineStack extends Stack {
@@ -23,15 +22,9 @@ export class AwsCdkPipelineStack extends Stack {
       blockPublicAccess: cdk.aws_s3.BlockPublicAccess.BLOCK_ALL,
     });
 
-    const pipeline = new cdk.aws_codepipeline.Pipeline(this, 'Pipeline', {
-      artifactBucket: artifactBucket,
-      // restartExecutionOnUpdate: true,
-      pipelineType: cdk.aws_codepipeline.PipelineType.V2
-    });
     const cdkPipeline = new cdk.pipelines.CodePipeline(this, 'CdkPipeline', {
       // pipelineName: 'CdkPipeline',
-      codePipeline: pipeline,
-      // artifactBucket: artifactBucket,
+      artifactBucket: artifactBucket,
       synth: new cdk.pipelines.ShellStep('Synth', {
         input: cdk.pipelines.CodePipelineSource.gitHub('khaihoan2711/aws-pipeline-cross-accounts-deployment', 'main', {
           authentication: cdk.SecretValue.secretsManager('github-token'),
@@ -54,7 +47,7 @@ export class AwsCdkPipelineStack extends Stack {
       alias: 'stg',
     });
     cdkPipeline.addStage(deployStaging).addPre(new cdk.pipelines.ManualApprovalStep('ApproveStagingDeployment'));
-    
+
     const deployProduction = new CdkPipelineDeployStage(this, 'DeployProduction', {
       env: AwsEnv.product,
       alias: 'prod',
